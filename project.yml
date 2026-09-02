@@ -1,0 +1,76 @@
+name: LiveSubtitleTranslator
+options:
+  bundleIdPrefix: com.yourcompany
+  deploymentTarget:
+    iOS: "17.4"
+
+targets:
+  LiveSubtitleTranslator:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Shared
+    info:
+      path: App/Info.plist
+      properties:
+        UILaunchScreen: {}
+        NSSupportsLiveActivities: true
+        CFBundleDisplayName: LiveSubtitleTranslator
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourcompany.LiveSubtitleTranslator
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+    dependencies:
+      - target: BroadcastExtension
+        embed: true
+      - target: WidgetExtension
+        embed: true
+    entitlements:
+      path: App/App.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.yourcompany.livesubtitletranslator
+
+  BroadcastExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: BroadcastExtension
+      - path: Shared
+    info:
+      path: BroadcastExtension/Info.plist
+      properties:
+        CFBundleDisplayName: BroadcastExtension
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.broadcast-services-upload
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).SampleHandler
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourcompany.LiveSubtitleTranslator.BroadcastExtension
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+    entitlements:
+      path: BroadcastExtension/BroadcastExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.yourcompany.livesubtitletranslator
+
+  WidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: WidgetExtension
+      - path: Shared
+    info:
+      path: WidgetExtension/Info.plist
+      properties:
+        CFBundleDisplayName: WidgetExtension
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourcompany.LiveSubtitleTranslator.WidgetExtension
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
