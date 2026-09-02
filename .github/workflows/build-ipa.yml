@@ -9,14 +9,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Select newest available Xcode
+        run: |
+          LATEST=$(ls -d /Applications/Xcode_*.app 2>/dev/null | sort -V | tail -n 1)
+          echo "Selecting: $LATEST"
+          sudo xcode-select -s "$LATEST/Contents/Developer"
+          xcodebuild -version
+
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Generate Xcode project
         run: xcodegen generate
-
-      - name: Show available Xcode versions
-        run: ls /Applications | grep Xcode
 
       - name: Build app (unsigned)
         run: |
